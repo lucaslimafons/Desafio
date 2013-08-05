@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Sobre";
+}
+<hgroup>
+    <h3>Sobre</h3>
+    <h4>Desafio: Descubra o Assassino</h4>
+</hgroup>
+<div class="row-fluid">
+    <div class="span12">
+        <p>
+            O empresário Bill G. Ates foi assassinado e o corpo dele foi deixado na frente da delegacia de polícia.
+            O detetive Lin Ust Orvalds foi escolhido para investigar este caso.
+            Após uma série de investigações, ele organizou uma lista com prováveis assassinos, os locais do crime e quais armas poderiam ter sido utilizadas.
+            Você pode conferir esta lista no arquivo anexo.
+        </p>
+        <br />
+        <p>Uma testemunha foi encontrada, mas ela só consegue responder se o detetive Lin Ust Orvalds fornecer uma teoria. Para cada teoria, o detetive "chuta" um assassino, um local e uma arma. 
+        A testemunha, então, responde com um número. Se a teoria estiver correta (assassino, local e arma corretos), ela responde 0. 
+        Se a teoria está errada, um valor 1, 2 ou 3 é retornado. 
+        O valor 1 indica que o assassino(a) está incorreto; 2 indica que o local está incorreto; 3 indica que a arma está incorreta. 
+        Se mais de uma suposição está incorreta, a testemunha retorna qualquer um dos valores incorretos (veja o exemplo).</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="form-actions text-right">
+        <button onclick='window.location="@Url.Action("Index", "Home")";' class="btn btn-large palette palette-carrot">Voltar</button>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Home";  
+}
+
+<div class="hero-unit">
+    <h1>Desafio: Descubra o Assassino</h1>
+    <p class="lead">O empresário Bill Gates foi assassinado e o corpo dele foi deixado na frente da delegacia de polícia.
+    O detetive Lin Ust Orvalds foi escolhido para investigar este caso.
+    Após uma série de investigações, ele organizou uma lista com prováveis assassinos, os locais do crime 
+    e quais armas poderiam ter sido utilizadas.<br />
+    Para saber mais sobre o desafio <a href="@Url.Action("About", "Home")">clique aqui</a> ou para conferir a lista <a href="@Url.Action("Lista", "Home")">aqui!</a></p>
+</div>
+<div class="row">
+    <div class="form-actions text-right">
+        <button onclick='window.location="@Url.Action("Find", "Home")";' class="btn btn-primary btn-large palette">Quero descobrir!</button>
+    </div>
+</div>

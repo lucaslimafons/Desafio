@@ -1,0 +1,160 @@
+@{
+    string suspects = ViewBag.Suspects != null ? (string)ViewBag.Suspects : string.Empty;
+    string locals = ViewBag.Locals != null ? (string)ViewBag.Locals : string.Empty;
+    string guns = ViewBag.Guns != null ? (string)ViewBag.Guns : string.Empty;
+}
+<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+
+<div class="row">
+    <div class="span1"></div>
+    <div class="span3">
+        @Html.Label("Suspeito", new { @class="bold" })
+        <input type="text" id="txtSuspect" maxlength="20" />
+    </div>
+    <div class="span3">
+        @Html.Label("Local", new { @class = "bold" })
+        <input type="text" data-toggle="tooltip" id="txtLocal" maxlength="30" />
+    </div>
+    <div class="span3">
+        @Html.Label("Arma", new { @class = "bold" })
+        <input type="text" id="txtGun" maxlength="13" />
+    </div>
+    <div class="span1"></div>
+</div>
+
+<div class="row">
+    <div class="form-actions text-right">
+        <div class="span2 text-left">
+            <label class="text-info"><strong>Número de tentativas:</strong></label>
+            </div>
+        <div class="span1 text-left">
+            <label id="lblNroTentativas" class="text-info"><strong>0</strong></label>
+        </div>
+        <div class="span4">
+            <label id="lblResponse" class="text-left"></label>
+        </div>
+        <button onclick="Limpar();" class="btn btn-large palette palette-wet-asphalt">Limpar</button>
+        <button onclick='window.location="@Url.Action("Index", "Home")";' class="btn btn-large palette palette-asbestos">Voltar</button>
+        <button onclick="Tentativa();" class="btn btn-primary btn-large palette palette-wisteria">Tentar!</button>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("#lblResponse").hide();
+        
+        $("#txtSuspect").attr('title', '@suspects');
+        $("#txtLocal").attr('title', '@locals');
+        $("#txtGun").attr('title', '@guns');
+
+        $("#txtSuspect").tooltip();
+        $("#txtLocal").tooltip();
+        $("#txtGun").tooltip();
+    });
+
+    $("#txtSuspect").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '@Url.Action("FindSuspect", "Home")',
+                type: "GET",
+                dataType: "json",
+                data: { nome: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.label, value: item.value };
+                    }));
+                }
+
+            });
+        },
+        minLength: 3,
+        autoFocus: true,
+        select: function (event, ui) {
+            $("#txtSuspect").val(ui.item.label);
+            return false;
+        }
+    });
+
+    $("#txtLocal").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '@Url.Action("FindLocal", "Home")',
+                type: "GET",
+                dataType: "json",
+                data: { nome: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.label, value: item.value };
+                    }));
+                }
+
+            });
+        },
+        minLength: 3,
+        autoFocus: true,
+        select: function (event, ui) {
+            $("#txtLocal").val(ui.item.label);
+            return false;
+        }
+    });
+
+    $("#txtGun").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '@Url.Action("FindGun", "Home")',
+                type: "GET",
+                dataType: "json",
+                data: { nome: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.label, value: item.value };
+                    }));
+                }
+
+            });
+        },
+        minLength: 3,
+        autoFocus: true,
+        select: function (event, ui) {
+            $("#txtGun").val(ui.item.label);
+            return false;
+        }
+    });
+
+    function Tentativa() {
+        $("#lblNroTentativas").text(parseInt($("#lblNroTentativas").text()) + 1)
+
+        $("#lblResponse").hide();
+        $.ajaxSetup({ cache: false });
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("VerificaTentativa", "Home")',
+            data: { suspect: $("#txtSuspect").val(), local: $("#txtLocal").val(), gun: $("#txtGun").val() }
+        }).success(function (data) {
+            if (data == "1") {
+                $("#lblResponse").text('O Suspeito está incorreto.');
+                $("#lblResponse").addClass("text-error");
+            } else if (data == "2") {
+                $("#lblResponse").text('O Local está incorreto.');
+                $("#lblResponse").addClass("text-error");
+            } else if (data == "3") {
+                $("#lblResponse").text('A Arma está incorreta.');
+                $("#lblResponse").addClass("text-error");
+            } else {
+                $("#lblResponse").text('Parabéns! Você solucionou o caso.');
+                $("#lblResponse").addClass("text-success");
+            }
+            $("#lblResponse").show();
+        });
+    }
+
+    function Limpar() {
+        $("#txtSuspect").val("");
+        $("#txtLocal").val("");
+        $("#txtGun").val("");
+        $("#lblResponse").text("");
+        $("#lblResponse").hide();
+        $("#lblNroTentativas").text("0");
+    }
+</script>

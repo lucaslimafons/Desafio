@@ -1,0 +1,36 @@
+
+<fieldset>
+    <legend>Tentativas</legend>
+    <div id="divTentativas">
+    </div>
+</fieldset>
+
+<div class="row">
+    <div class="form-actions text-right">
+        <button onclick='window.location="@Url.Action("Index", "Home")";' class="btn btn-large palette palette-asbestos">Voltar</button>
+        <button onclick="Resposta()" class="btn btn-primary btn-large palette palette-wisteria">Resposta!</button>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("#divTentativas").hide();
+    });
+
+    function Resposta() {
+        $.ajaxSetup({ cache: false });
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("MontaGridResponses", "Home")',
+            data: {}
+        }).success(function (data) {
+            if (data != "") {
+                $("#divTentativas").html();
+                $("#divTentativas").html(data);
+                $("#divTentativas").show();
+            } else {
+                $("#divTentativas").hide();
+            }
+        });
+    };
+</script>
